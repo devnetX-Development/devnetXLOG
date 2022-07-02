@@ -1,0 +1,33 @@
+{
+	"name": "devnetXLOG",
+	"version": "1.1.1",
+	"description": "A simple Arduino logging library that provides easy printf-style outputs to Serial.",
+	"keywords": "devnetX, Log, Arduino, Serial, UART, printf, LOG, PRINT",
+	"repository":
+	{
+	  "type": "git",
+	  "url": "https://github.com/devnetX-Development/devnetXLOG.git"
+	},
+	"authors":
+	[
+	  {
+		"name": "Alexej Goujine",
+		"email": "dev@devnetx.at",
+		"url": "https://github.com/devnetX-Development",
+		"maintainer": true
+	  }
+	],
+	"license": "MIT",
+	"homepage": "https://github.com/devnetX-Development/devnetXLOG",
+	"dependencies": {
+	},
+	"frameworks": "arduino",
+	"platforms": ["atmelavr", "espressif8266", "espressif32", "atmelsam"],
+	"export": {
+		"exclude": ["platformio.ini", ".gitignore", ".vscode/*", ".pio/*", "tests/*", "src/main.cpp"]
+	},
+	"headers": ["devnetXLOG.h"],
+	"build": {
+		"flags": ["'-D PRODUCT_NAME=\"devnetXLOG Example Firmware\"'", "-D FW_MAJOR=1", "-D FW_MINOR=0", "-D FW_PATCH=0", "-D DEVNETXLOG=3"]
+	}
+  }
