@@ -30,11 +30,15 @@
 
 	#if defined(DEVNETXLOG) && (DEVNETXLOG > DEVNETXLOG_OFF)
 
+		#if !defined(DEVNETXLOG_LINEBREAK)
+			#define DEVNETXLOG_LINEBREAK "\r\n"
+		#endif
+
 		#if !defined(DEVNETXLOG_BAUD_RATE)
 			#define DEVNETXLOG_BAUD_RATE 57600UL
 		#endif
 
-		#if defined(DEVENTXLOG_NOPATHS)
+		#if defined(DEVNETXLOG_NOPATHS)
 			/*
 				#define STRIPPATH(s) \
 					(sizeof(s) > 2  && (s)[sizeof(s)-2]  == '\\' ? (s) + sizeof(s) - 1  : \
@@ -60,7 +64,8 @@
 		#endif
 
 		#if !defined(DEVNETXLOG_NO_WELCOME)
-			#define DEVNETXLOG_WELCOME "\n\n / \\  %s\n( C ) Firmware Ver.: %u.%u.%u\n \\ /  Compiled: %s, %s\n\n"
+			//#define DEVNETXLOG_WELCOME "\n\n / \\  %s\n( C ) Firmware Ver.: %u.%u.%u\n \\ /  Compiled: %s, %s\n\n"
+			#define DEVNETXLOG_WELCOME DEVNETXLOG_LINEBREAK DEVNETXLOG_LINEBREAK " / \\  %s" DEVNETXLOG_LINEBREAK "( C ) Firmware Ver.: %u.%u.%u" DEVNETXLOG_LINEBREAK " \\ /  Compiled: %s, %s" DEVNETXLOG_LINEBREAK DEVNETXLOG_LINEBREAK
 		#endif
 
 		#if !defined(DEVNETXLOG_FATAL_ERROR)
@@ -86,14 +91,18 @@
 		extern HardwareSerial *LOGSerial;
 		bool LOGBegin(HardwareSerial *serial);
 		
-		// ####################################################
-		// ##   devnetXLOG PRINT() & HALT() Implementation   ##
-		// ####################################################
+		// ##########################################################
+		// ##   devnetXLOG PRINT() FLUSH() HALT() Implementation   ##
+		// ##########################################################
 
 		#if defined(ARDUINO_ARCH_AVR)
 
 			#define PRINT(fmt, ...) do { \
 				printf_P(PSTR(fmt), ##__VA_ARGS__); \
+			} while (0)
+
+			#define FLUSH() do { \
+				LOGSerial->flush(); \
 			} while (0)
 
 			#define HALT(fmt, ...) do { \
@@ -105,6 +114,10 @@
 			
 			#define PRINT(fmt, ...) do { \
 				LOGSerial->printf_P(PSTR(fmt), ##__VA_ARGS__); \
+			} while (0)
+
+			#define FLUSH() do { \
+				LOGSerial->flush(); \
 			} while (0)
 
 			#define HALT(fmt, ...) do { \
@@ -123,7 +136,10 @@
 			#define PRINT(fmt, ...) do { \
 				snprintf(LOGBuffer, sizeof(LOGBuffer), fmt, ##__VA_ARGS__); \
 				LOGSerial->print(LOGBuffer); \
-				while (true) { delay(1000); }; \
+			} while (0)
+
+			#define FLUSH() do { \
+				LOGSerial->flush(); \
 			} while (0)
 
 			#define HALT(fmt, ...) do { \
@@ -223,7 +239,7 @@
 
 				#define LOG(fmt, ...) do { \
 					LOGMillisCurrent = millis(); \
-					snprintf(LOGBuffer, sizeof(LOGBuffer), "%07lu (%+06lu) | %s:%u | " fmt, LOGMillisCurrent, LOGMillisCurrent - LOGMillisLast, __FILENAME__, __LINE__, ##__VA_ARGS__); \
+					snprintf(LOGBuffer, sizeof(LOGBuffer), "%07lu (%+06ld) | %s:%u | " fmt, LOGMillisCurrent, LOGMillisCurrent - LOGMillisLast, __FILENAME__, __LINE__, ##__VA_ARGS__); \
 					LOGSerial->print(LOGBuffer); \
 					LOGMillisLast = LOGMillisCurrent; \
 				} while (0)
@@ -237,8 +253,9 @@
 		// devnetXLOG is deactivated
 		extern "C" bool LOGBegin(HardwareSerial *serial);
 		
-		#define PRINT(...)		do { (void)0; } while(0)
 		#define LOG(...)		do { (void)0; } while(0)
+		#define PRINT(...)		do { (void)0; } while(0)
+		#define FLUSH()			do { (void)0; } while(0)
 		#define HALT(...)		do { while (true) { delay(1000); }; } while (0)
 
 	#endif
