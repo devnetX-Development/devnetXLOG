@@ -54,7 +54,7 @@
 		#endif
 
 		// Welcome String output
-		#if !defined(DEVNETXLOG_NO_WELCOME)
+		#if !defined(DEVNETXLOG_NOWELCOME)
 
 			#if defined(ARDUINO_ARCH_AVR)
 				printf_P(PSTR(DEVNETXLOG_WELCOME), PRODUCT_NAME, FW_MAJOR, FW_MINOR, FW_PATCH, __DATE__, __TIME__);

@@ -3,13 +3,8 @@
 
 // =========================================================================
 // NOTE: You have to add some build_flags to platformio.ini in your project!
+// See: https://registry.platformio.org/libraries/devnetx/devnetXLOG
 // =========================================================================
-// build_flags =
-// 	'-D PRODUCT_NAME="devnetXLOG Example Firmware"'
-// 	-D FW_MAJOR=1
-// 	-D FW_MINOR=0
-// 	-D FW_PATCH=0
-// 	-D DEVNETXLOG=3
 
 void setup()
 {
@@ -19,8 +14,16 @@ void setup()
 
 void loop()
 {
-	LOG("This is a %s test.\n", "LOG()");
-	PRINT("This is a %s test.\n", "-5");
-	HALT("Unknown error %d.\n", -1);
-	//delay(1000);
+	LOG("This is a test %s, followed by an integer: %i", "String", 42);
+	PRINT("This is a %s without line termination. Loading", "message");
+
+	for (uint8_t n = 0; n < 10; n++)
+	{
+		PRINT(".");
+		delay(500);	
+	}
+
+	PRINT(__BR__);
+
+	HALT("Actually, no error occured. Demo done.");
 }

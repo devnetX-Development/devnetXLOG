@@ -16,77 +16,89 @@
 		#error "Unsupported platform."
 	#endif
 
-	/// devnetXLOG is deactivated: no output to device monitor at all + no UART initialization (build_flags = -D DEVNETXLOG=0)
+	// devnetXLOG is deactivated
 	#define DEVNETXLOG_OFF 0U
 
-	/// devnetXLOG minimal output: printf-style formatting only (build_flags = -D DEVNETXLOG=1)
+	// devnetXLOG minimal output
 	#define DEVNETXLOG_MIN 1U
 
-	/// devnetXLOG medium output: file name + line number + printf-style formatting (build_flags = -D DEVNETXLOG=2)
+	// devnetXLOG medium output
 	#define DEVNETXLOG_MED 2U
 
-	/// devnetXLOG maximal output: millis + millis since last LOG() + file name + line number + printf-style formatting (build_flags = -D DEVNETXLOG=3)
+	// devnetXLOG maximal output
 	#define DEVNETXLOG_MAX 3U
 
-	#if defined(DEVNETXLOG) && (DEVNETXLOG > DEVNETXLOG_OFF)
+	// Baud Rate
+	#if !defined(DEVNETXLOG_BAUD_RATE)
+		#define DEVNETXLOG_BAUD_RATE 57600UL
+	#endif
 
-		#if !defined(DEVNETXLOG_LINEBREAK)
-			#define DEVNETXLOG_LINEBREAK "\r\n"
-		#endif
+	// Line Break
+	#if (defined(DEVNETXLOG_LINEBREAK_WINDOWS) && !defined(DEVNETXLOG_LINEBREAK_UNIX)) || \
+		(!defined(DEVNETXLOG_LINEBREAK_WINDOWS) && !defined(DEVNETXLOG_LINEBREAK_UNIX))
+		#define __BR__ "\r\n"
+	#elif (defined(DEVNETXLOG_LINEBREAK_UNIX) && !defined(DEVNETXLOG_LINEBREAK_WINDOWS))
+		#define __BR__ "\n"
+	#else
+		#error "Please define only one line break!"
+	#endif
 
-		#if !defined(DEVNETXLOG_BAUD_RATE)
-			#define DEVNETXLOG_BAUD_RATE 57600UL
-		#endif
+	// Termination
+	#if defined(DEVNETXLOG_NOTERMINATION)
+		#define __TERMINATION_STRING__ ""
+	#else
+		#define __TERMINATION_STRING__ "" __BR__
+	#endif
 
-		#if defined(DEVNETXLOG_NOPATHS)
-			/*
-				#define STRIPPATH(s) \
-					(sizeof(s) > 2  && (s)[sizeof(s)-2]  == '\\' ? (s) + sizeof(s) - 1  : \
-					sizeof(s) > 3  && (s)[sizeof(s)-3]  == '\\' ? (s) + sizeof(s) - 2  : \
-					sizeof(s) > 4  && (s)[sizeof(s)-4]  == '\\' ? (s) + sizeof(s) - 3  : \
-					sizeof(s) > 5  && (s)[sizeof(s)-5]  == '\\' ? (s) + sizeof(s) - 4  : \
-					sizeof(s) > 6  && (s)[sizeof(s)-6]  == '\\' ? (s) + sizeof(s) - 5  : \
-					sizeof(s) > 7  && (s)[sizeof(s)-7]  == '\\' ? (s) + sizeof(s) - 6  : \
-					sizeof(s) > 8  && (s)[sizeof(s)-8]  == '\\' ? (s) + sizeof(s) - 7  : \
-					sizeof(s) > 9  && (s)[sizeof(s)-9]  == '\\' ? (s) + sizeof(s) - 8  : \
-					sizeof(s) > 10 && (s)[sizeof(s)-10] == '\\' ? (s) + sizeof(s) - 9  : \
-					sizeof(s) > 11 && (s)[sizeof(s)-11] == '\\' ? (s) + sizeof(s) - 10 : (s))
-
-				#define __FILENAME__ STRIPPATH(__FILE__)
-			*/
-			
+	// Path Separator
+	#if defined(DEVNETXLOG_NOPATHS)
+	
+		#if (defined(DEVNETXLOG_PATHSEPARATOR_WINDOWS) && !defined(DEVNETXLOG_PATHSEPARATOR_UNIX)) || \
+			(!defined(DEVNETXLOG_PATHSEPARATOR_WINDOWS) && !defined(DEVNETXLOG_PATHSEPARATOR_UNIX))
 			#define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
-
+		#elif (defined(DEVNETXLOG_PATHSEPARATOR_UNIX) && !defined(DEVNETXLOG_PATHSEPARATOR_WINDOWS))
+			#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 		#else
-
-			#define __FILENAME__ __FILE__
-
+			#error "Please define only one path separator!"
 		#endif
+	
+	#else
 
-		#if !defined(DEVNETXLOG_NO_WELCOME)
-			//#define DEVNETXLOG_WELCOME "\n\n / \\  %s\n( C ) Firmware Ver.: %u.%u.%u\n \\ /  Compiled: %s, %s\n\n"
-			#define DEVNETXLOG_WELCOME DEVNETXLOG_LINEBREAK DEVNETXLOG_LINEBREAK " / \\  %s" DEVNETXLOG_LINEBREAK "( C ) Firmware Ver.: %u.%u.%u" DEVNETXLOG_LINEBREAK " \\ /  Compiled: %s, %s" DEVNETXLOG_LINEBREAK DEVNETXLOG_LINEBREAK
-		#endif
+		#define __FILENAME__ __FILE__
 
-		#if !defined(DEVNETXLOG_FATAL_ERROR)
-			#define DEVNETXLOG_FATAL_ERROR "FATAL ERROR - System HALTED: "
-		#endif
+	#endif
 
-		#if !defined(PRODUCT_NAME)
-			#define PRODUCT_NAME "PRODUCT_NAME"
-		#endif
+	// Product Name
+	#if !defined(PRODUCT_NAME)
+		#define PRODUCT_NAME "PRODUCT_NAME not specified"
+	#endif
 
-		#if !defined(FW_MAJOR)
-			#define FW_MAJOR 0
-		#endif
+	// Major Firmware Version
+	#if !defined(FW_MAJOR)
+		#define FW_MAJOR 0
+	#endif
 
-		#if !defined(FW_MINOR)
-			#define FW_MINOR 0
-		#endif
+	// Minor Firmware Version
+	#if !defined(FW_MINOR)
+		#define FW_MINOR 0
+	#endif
 
-		#if !defined(FW_PATCH)
-			#define FW_PATCH 0
-		#endif
+	// Patch Firmware Version
+	#if !defined(FW_PATCH)
+		#define FW_PATCH 0
+	#endif
+
+	// Welcome Message
+	#if !defined(DEVNETXLOG_NOWELCOME)
+		#define DEVNETXLOG_WELCOME __BR__ __BR__ " / \\  %s" __BR__ "( C ) Firmware Ver.: %u.%u.%u" __BR__ " \\ /  Compiled: %s, %s" __BR__ __BR__
+	#endif
+
+	// Fatal Error Message
+	#if !defined(DEVNETXLOG_FATALERROR)
+		#define DEVNETXLOG_FATALERROR "FATAL ERROR - System HALTED: "
+	#endif
+
+	#if defined(DEVNETXLOG) && (DEVNETXLOG > DEVNETXLOG_OFF)
 
 		extern HardwareSerial *LOGSerial;
 		bool LOGBegin(HardwareSerial *serial);
@@ -106,7 +118,7 @@
 			} while (0)
 
 			#define HALT(fmt, ...) do { \
-				printf_P(PSTR(DEVNETXLOG_FATAL_ERROR fmt), ##__VA_ARGS__); \
+				printf_P(PSTR(DEVNETXLOG_FATALERROR fmt), ##__VA_ARGS__); \
 				while (true) { delay(1000); }; \
 			} while (0)
 
@@ -121,7 +133,7 @@
 			} while (0)
 
 			#define HALT(fmt, ...) do { \
-				LOGSerial->printf_P(PSTR(DEVNETXLOG_FATAL_ERROR fmt), ##__VA_ARGS__); \
+				LOGSerial->printf_P(PSTR(DEVNETXLOG_FATALERROR fmt), ##__VA_ARGS__); \
 				while (true) { delay(1000); }; \
 			} while (0)
 
@@ -143,7 +155,7 @@
 			} while (0)
 
 			#define HALT(fmt, ...) do { \
-				snprintf(LOGBuffer, sizeof(LOGBuffer), DEVNETXLOG_FATAL_ERROR fmt, ##__VA_ARGS__); \
+				snprintf(LOGBuffer, sizeof(LOGBuffer), DEVNETXLOG_FATALERROR fmt, ##__VA_ARGS__); \
 				LOGSerial->print(LOGBuffer); \
 				while (true) { delay(1000); }; \
 			} while (0)
@@ -159,27 +171,21 @@
 			#if defined(ARDUINO_ARCH_AVR)
 
 				#define LOG(fmt, ...) do { \
-					printf_P(PSTR(fmt), ##__VA_ARGS__); \
+					printf_P(PSTR(fmt __TERMINATION_STRING__), ##__VA_ARGS__); \
 				} while (0)
 
 			#elif defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
 
 				#define LOG(fmt, ...) do { \
-					LOGSerial->printf_P(PSTR(fmt), ##__VA_ARGS__); \
+					LOGSerial->printf_P(PSTR(fmt __TERMINATION_STRING__), ##__VA_ARGS__); \
 				} while (0)
 
 			#elif defined(ARDUINO_ARCH_SAMD)
 
 				#define LOG(fmt, ...) do { \
-					snprintf(LOGBuffer, sizeof(LOGBuffer), fmt, ##__VA_ARGS__); \
+					snprintf(LOGBuffer, sizeof(LOGBuffer), fmt __TERMINATION_STRING__, ##__VA_ARGS__); \
 					LOGSerial->print(LOGBuffer); \
 				} while (0)
-
-				#define LOG(fmt, ...) \
-				{ \
-					snprintf(LOGBuffer, sizeof(LOGBuffer), fmt, ##__VA_ARGS__); \
-					LOGSerial->print(LOGBuffer); \
-				}
 
 			#endif
 
@@ -192,19 +198,19 @@
 			#if defined(ARDUINO_ARCH_AVR)
 
 				#define LOG(fmt, ...) do { \
-					printf_P(PSTR("%s:%u | " fmt), __FILENAME__, __LINE__, ##__VA_ARGS__); \
+					printf_P(PSTR("%s:%u | " fmt __TERMINATION_STRING__), __FILENAME__, __LINE__, ##__VA_ARGS__); \
 				} while (0)
 
 			#elif defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
 
 				#define LOG(fmt, ...) do { \
-					LOGSerial->printf_P(PSTR("%s:%u | " fmt), __FILENAME__, __LINE__, ##__VA_ARGS__); \
+					LOGSerial->printf_P(PSTR("%s:%u | " fmt __TERMINATION_STRING__), __FILENAME__, __LINE__, ##__VA_ARGS__); \
 				} while (0)
 
 			#elif defined(ARDUINO_ARCH_SAMD)
 
 				#define LOG(fmt, ...) do { \
-					snprintf(LOGBuffer, sizeof(LOGBuffer), "%s:%u | " fmt, __FILENAME__, __LINE__, ##__VA_ARGS__); \
+					snprintf(LOGBuffer, sizeof(LOGBuffer), "%s:%u | " fmt __TERMINATION_STRING__, __FILENAME__, __LINE__, ##__VA_ARGS__); \
 					LOGSerial->print(LOGBuffer); \
 				} while (0)
 
@@ -223,7 +229,7 @@
 
 				#define LOG(fmt, ...) do { \
 					LOGMillisCurrent = millis(); \
-					printf_P(PSTR("%07lu (%+06lu) | %s:%u | " fmt), LOGMillisCurrent, LOGMillisCurrent - LOGMillisLast, __FILENAME__, __LINE__, ##__VA_ARGS__); \
+					printf_P(PSTR("%07lu (%+06lu) | %s:%u | " fmt __TERMINATION_STRING__), LOGMillisCurrent, LOGMillisCurrent - LOGMillisLast, __FILENAME__, __LINE__, ##__VA_ARGS__); \
 					LOGMillisLast = LOGMillisCurrent; \
 				} while (0)
 
@@ -231,7 +237,7 @@
 
 				#define LOG(fmt, ...) do { \
 					LOGMillisCurrent = millis(); \
-					LOGSerial->printf_P(PSTR("%07lu (%+06lu) | %s:%u | " fmt), LOGMillisCurrent, LOGMillisCurrent - LOGMillisLast, __FILENAME__, __LINE__, ##__VA_ARGS__); \
+					LOGSerial->printf_P(PSTR("%07lu (%+06lu) | %s:%u | " fmt __TERMINATION_STRING__), LOGMillisCurrent, LOGMillisCurrent - LOGMillisLast, __FILENAME__, __LINE__, ##__VA_ARGS__); \
 					LOGMillisLast = LOGMillisCurrent; \
 				} while (0)
 
@@ -239,7 +245,7 @@
 
 				#define LOG(fmt, ...) do { \
 					LOGMillisCurrent = millis(); \
-					snprintf(LOGBuffer, sizeof(LOGBuffer), "%07lu (%+06ld) | %s:%u | " fmt, LOGMillisCurrent, LOGMillisCurrent - LOGMillisLast, __FILENAME__, __LINE__, ##__VA_ARGS__); \
+					snprintf(LOGBuffer, sizeof(LOGBuffer), "%07lu (%+06ld) | %s:%u | " fmt __TERMINATION_STRING__, LOGMillisCurrent, LOGMillisCurrent - LOGMillisLast, __FILENAME__, __LINE__, ##__VA_ARGS__); \
 					LOGSerial->print(LOGBuffer); \
 					LOGMillisLast = LOGMillisCurrent; \
 				} while (0)
