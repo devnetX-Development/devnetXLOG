@@ -92,14 +92,14 @@ Following parameters and options are supported in the latest version of this lib
 
 
 ### Example Configuration: Minimal feature level
-```
+```ini
 [env:]
 build_flags =
 	-D DEVNETXLOG=1
 	-D DEVNETXLOG_NOWELCOME
 ```
 ### Example Configuration: Maximal feature level
-```
+```ini
 [env:]
 build_flags =
 	'-D PRODUCT_NAME="devnetXLOG Example Firmware"'
@@ -118,7 +118,8 @@ You may want to improve your PlatformIO device monitor (aka Serial Terminal) e.g
 This can be done by defining ```monitor_flags``` in the ```platformio.ini``` inside your project.
 
 We use the following flags on Windows:
-```
+```ini
+[env:]
 monitor_flags =
 	--quiet
 	--echo
