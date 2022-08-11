@@ -4,7 +4,7 @@
 /// \copyright Copyright (c) 2019-2022 devnetX Development
 
 #include <Arduino.h>
-#include <devnetXLog.h>
+#include <devnetXLOG.h>
 
 #if defined(DEVNETXLOG) && (DEVNETXLOG > DEVNETXLOG_OFF)
 
