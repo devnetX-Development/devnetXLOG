@@ -71,7 +71,7 @@ Following parameters and options are supported in the latest version of this lib
 
 ### Supported Parameters
 - ```-D DEVNETXLOG``` Activates or deactivates devnetXLOG with the specified feature level. See: [Feature Levels](#feature-levels).
-- ```-D DEVNETXLOG_BAUD_RATE``` Defines the Serial Baud Rate (default: ```57600UL```).
+- ```-D DEVNETXLOG_BAUDRATE``` Defines the Serial baud rate (default: ```115200UL```).
 - ```-D DEVNETXLOG_BUFFER_SIZE``` Defines the printf buffer size in RAM (default: ```256U```).
 	*Note:* The buffer is only used by ``` ARDUINO_ARCH_SAMD ```.
 - ```-D PRODUCT_NAME``` Defines the product name, displayed in the ```LOGBegin(...)``` welcome message.
@@ -103,7 +103,7 @@ build_flags =
 [env:]
 build_flags =
 	'-D PRODUCT_NAME="devnetXLOG Example Firmware"'
-	-D DEVNETXLOG_BAUD_RATE=115200
+	-D DEVNETXLOG_BAUDRATE=115200
 	-D DEVNETXLOG=3
 	-D FW_MAJOR=1
 	-D FW_MINOR=2
@@ -115,23 +115,17 @@ build_flags =
 
 ## PlatformIO Device Monitor Configuration (optional)
 You may want to improve your PlatformIO device monitor (aka Serial Terminal) e.g. by adding time stamps and other features.
-This can be done by defining ```monitor_flags``` in the ```platformio.ini``` inside your project.
+This can be done by defining ```monitor_filters``` in the ```platformio.ini``` inside your project.
 
-We use the following flags on Windows:
+We use the following filters on Windows:
 ```ini
 [env:]
-monitor_flags =
-	--quiet
-	--echo
-	--eol
-	CRLF
-	--filter
+monitor_filters =
 	colorize
-	--filter
 	time
 ```
 For more details, see:
-- https://docs.platformio.org/en/stable/projectconf/section_env_monitor.html#monitor-flags
+- https://docs.platformio.org/en/stable/projectconf/section_env_monitor.html#monitor-filters
 - https://docs.platformio.org/en/stable/core/userguide/device/cmd_monitor.html#cmd-device-monitor-filters
 
 ---
