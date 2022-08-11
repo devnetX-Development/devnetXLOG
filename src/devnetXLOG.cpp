@@ -58,8 +58,10 @@
 
 			#if defined(ARDUINO_ARCH_AVR)
 				printf_P(PSTR(DEVNETXLOG_WELCOME), PRODUCT_NAME, FW_MAJOR, FW_MINOR, FW_PATCH, __DATE__, __TIME__);
-			#elif defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
+			#elif defined(ARDUINO_ARCH_ESP8266)
 				LOGSerial->printf_P(PSTR(DEVNETXLOG_WELCOME), PRODUCT_NAME, FW_MAJOR, FW_MINOR, FW_PATCH, __DATE__, __TIME__, ESP.getFullVersion().c_str());
+			#elif defined(ARDUINO_ARCH_ESP32)
+				LOGSerial->printf_P(PSTR(DEVNETXLOG_WELCOME), PRODUCT_NAME, FW_MAJOR, FW_MINOR, FW_PATCH, __DATE__, __TIME__, ESP.getSdkVersion());
 			#elif defined(ARDUINO_ARCH_SAMD)
 				snprintf(LOGBuffer, sizeof(LOGBuffer), DEVNETXLOG_WELCOME , PRODUCT_NAME, FW_MAJOR, FW_MINOR, FW_PATCH, __DATE__, __TIME__);
 				LOGSerial->print(LOGBuffer);
