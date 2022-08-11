@@ -30,7 +30,7 @@
 
 	// Baud Rate
 	#if !defined(DEVNETXLOG_BAUDRATE)
-		#define DEVNETXLOG_BAUDRATE 57600UL
+		#define DEVNETXLOG_BAUDRATE 115200UL
 	#endif
 
 	// Line Break
