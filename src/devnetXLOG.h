@@ -1,7 +1,7 @@
 /// \file      devnetXLOG.h
 /// \brief     A simple Arduino logging library that provides easy printf-style outputs to Serial.
 /// \author    Alexej Goujine (dev@devnetx.at)
-/// \copyright Copyright (c) 2019-2021 devnetX Development
+/// \copyright Copyright (c) 2019-2022 devnetX Development
 
 #pragma once
 
@@ -29,8 +29,8 @@
 	#define DEVNETXLOG_MAX 3U
 
 	// Baud Rate
-	#if !defined(DEVNETXLOG_BAUD_RATE)
-		#define DEVNETXLOG_BAUD_RATE 57600UL
+	#if !defined(DEVNETXLOG_BAUDRATE)
+		#define DEVNETXLOG_BAUDRATE 57600UL
 	#endif
 
 	// Line Break
@@ -90,7 +90,11 @@
 
 	// Welcome Message
 	#if !defined(DEVNETXLOG_NOWELCOME)
-		#define DEVNETXLOG_WELCOME __BR__ __BR__ " / \\  %s" __BR__ "( C ) Firmware Ver.: %u.%u.%u" __BR__ " \\ /  Compiled: %s, %s" __BR__ __BR__
+		#if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
+			#define DEVNETXLOG_WELCOME __BR__ __BR__ " / \\  %s" __BR__ "( C ) Firmware Ver.: %u.%u.%u / Compiled: %s, %s" __BR__ " \\ /  %s" __BR__ __BR__
+		#else
+			#define DEVNETXLOG_WELCOME __BR__ __BR__ " / \\  %s" __BR__ "( C ) Firmware Ver.: %u.%u.%u" __BR__ " \\ /  Compiled: %s, %s" __BR__ __BR__
+		#endif
 	#endif
 
 	// Fatal Error Message

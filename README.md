@@ -8,7 +8,7 @@ bool LOGBegin(HardwareSerial *serial);
 ```
 Initializes the library and the Serial specified by ```serial```.
 Displays the welcome message if not deactivated with ```DEVNETXLOG_NOWELCOME```.
-The initilization must be done **before** calling any other library functions.
+The initialization must be done **before** calling any other library functions.
 
 *Returns:* ```true``` on success or ```false``` if ```DEVNETXLOG``` is not defined or set to ```0```.
 

@@ -1,7 +1,7 @@
 /// \file      devnetXLOG.cpp
 /// \brief     A simple Arduino logging library that provides easy printf-style outputs to Serial.
 /// \author    Alexej Goujine (dev@devnetx.at)
-/// \copyright Copyright (c) 2019-2021 devnetX Development
+/// \copyright Copyright (c) 2019-2022 devnetX Development
 
 #include <Arduino.h>
 #include <devnetXLog.h>
@@ -42,7 +42,7 @@
 			return false;
 
 		LOGSerial = serial;
-		LOGSerial->begin(DEVNETXLOG_BAUD_RATE);
+		LOGSerial->begin(DEVNETXLOG_BAUDRATE);
 		
 		// Controller specific pre-initialization
 		#if defined(ARDUINO_ARCH_AVR)
@@ -59,7 +59,7 @@
 			#if defined(ARDUINO_ARCH_AVR)
 				printf_P(PSTR(DEVNETXLOG_WELCOME), PRODUCT_NAME, FW_MAJOR, FW_MINOR, FW_PATCH, __DATE__, __TIME__);
 			#elif defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
-				LOGSerial->printf_P(PSTR(DEVNETXLOG_WELCOME), PRODUCT_NAME, FW_MAJOR, FW_MINOR, FW_PATCH, __DATE__, __TIME__);
+				LOGSerial->printf_P(PSTR(DEVNETXLOG_WELCOME), PRODUCT_NAME, FW_MAJOR, FW_MINOR, FW_PATCH, __DATE__, __TIME__, ESP.getFullVersion().c_str());
 			#elif defined(ARDUINO_ARCH_SAMD)
 				snprintf(LOGBuffer, sizeof(LOGBuffer), DEVNETXLOG_WELCOME , PRODUCT_NAME, FW_MAJOR, FW_MINOR, FW_PATCH, __DATE__, __TIME__);
 				LOGSerial->print(LOGBuffer);
