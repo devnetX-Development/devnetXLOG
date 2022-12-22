@@ -12,30 +12,37 @@ The initialization must be done **before** calling any other library functions.
 
 *Returns:* ```true``` on success or ```false``` if ```DEVNETXLOG``` is not defined or set to ```0```.
 
-### LOG
+### LOG (macro)
 ```c++
-void LOG(const char *fmt, ...);
+LOG(const char *fmt, ...);
 ```
 Sends a log entry over Serial, according to the selected feature level and specified parameters and options.
 The message can be formatted using printf-style syntax.
 
 For more details on printf formatting, see: https://www.tutorialspoint.com/c_standard_library/c_function_printf.htm
 
-### PRINT
+### PRINT (macro)
 ```c++
 void PRINT(const char *fmt, ...);
 ```
 Sends a raw message over Serial without any features defined by the feature level or specified parameters and options.
 The message can be formatted using printf-style syntax.
 
-### FLUSH
+### WRITE (macro)
+```c++
+void WRITE(val);
+```
+Passes val to Serial.print().
+This is basically a macro for Serial.print(val).
+
+### FLUSH (macro)
 ```c++
 void FLUSH();
 ```
 Waits until the transmit buffer is empty. 
 This can be useful if you want to ensure that all data has been transmitted by the Serial before sending the MCU to sleep.
 
-### HALT
+### HALT (macro)
 ```c++
 void HALT(const char *fmt, ...);
 ```

@@ -113,6 +113,10 @@
 
 		#if defined(ARDUINO_ARCH_AVR)
 
+			#define WRITE(val) do { \
+				LOGSerial->print(val); \
+			} while (0)
+
 			#define PRINT(fmt, ...) do { \
 				printf_P(PSTR(fmt), ##__VA_ARGS__); \
 			} while (0)
@@ -128,6 +132,10 @@
 
 		#elif defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
 			
+			#define WRITE(val) do { \
+				LOGSerial->print(val); \
+			} while (0)
+
 			#define PRINT(fmt, ...) do { \
 				LOGSerial->printf_P(PSTR(fmt), ##__VA_ARGS__); \
 			} while (0)
@@ -148,6 +156,10 @@
 			#endif
 
 			extern char LOGBuffer[DEVNETXLOG_BUFFER_SIZE];
+
+			#define WRITE(val) do { \
+				LOGSerial->print(val); \
+			} while (0)
 
 			#define PRINT(fmt, ...) do { \
 				snprintf(LOGBuffer, sizeof(LOGBuffer), fmt, ##__VA_ARGS__); \
@@ -263,10 +275,11 @@
 		// devnetXLOG is deactivated
 		extern "C" bool LOGBegin(HardwareSerial *serial);
 		
-		#define LOG(...)		do { (void)0; } while(0)
-		#define PRINT(...)		do { (void)0; } while(0)
-		#define FLUSH()			do { (void)0; } while(0)
+		#define WRITE(...)		do { (void)0; } while (0)
+		#define PRINT(...)		do { (void)0; } while (0)
+		#define FLUSH()			do { (void)0; } while (0)
 		#define HALT(...)		do { while (true) { delay(1000); }; } while (0)
+		#define LOG(...)		do { (void)0; } while (0)
 
 	#endif
 

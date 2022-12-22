@@ -19,7 +19,7 @@ void loop()
 
 	for (uint8_t n = 0; n < 10; n++)
 	{
-		PRINT(".");
+		WRITE(".");
 		delay(500);	
 	}
 
