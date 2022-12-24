@@ -107,77 +107,6 @@
 		extern HardwareSerial *LOGSerial;
 		bool LOGBegin(HardwareSerial *serial);
 		
-		// ##########################################################
-		// ##   devnetXLOG PRINT() FLUSH() HALT() Implementation   ##
-		// ##########################################################
-
-		#if defined(ARDUINO_ARCH_AVR)
-
-			#define WRITE(val) do { \
-				LOGSerial->print(val); \
-			} while (0)
-
-			#define PRINT(fmt, ...) do { \
-				printf_P(PSTR(fmt), ##__VA_ARGS__); \
-			} while (0)
-
-			#define FLUSH() do { \
-				LOGSerial->flush(); \
-			} while (0)
-
-			#define HALT(fmt, ...) do { \
-				printf_P(PSTR(DEVNETXLOG_FATALERROR fmt), ##__VA_ARGS__); \
-				while (true) { delay(1000); }; \
-			} while (0)
-
-		#elif defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
-			
-			#define WRITE(val) do { \
-				LOGSerial->print(val); \
-			} while (0)
-
-			#define PRINT(fmt, ...) do { \
-				LOGSerial->printf_P(PSTR(fmt), ##__VA_ARGS__); \
-			} while (0)
-
-			#define FLUSH() do { \
-				LOGSerial->flush(); \
-			} while (0)
-
-			#define HALT(fmt, ...) do { \
-				LOGSerial->printf_P(PSTR(DEVNETXLOG_FATALERROR fmt), ##__VA_ARGS__); \
-				while (true) { delay(1000); }; \
-			} while (0)
-
-		#elif defined(ARDUINO_ARCH_SAMD)
-
-			#if !defined(DEVNETXLOG_BUFFER_SIZE)
-				#define DEVNETXLOG_BUFFER_SIZE 256UL
-			#endif
-
-			extern char LOGBuffer[DEVNETXLOG_BUFFER_SIZE];
-
-			#define WRITE(val) do { \
-				LOGSerial->print(val); \
-			} while (0)
-
-			#define PRINT(fmt, ...) do { \
-				snprintf(LOGBuffer, sizeof(LOGBuffer), fmt, ##__VA_ARGS__); \
-				LOGSerial->print(LOGBuffer); \
-			} while (0)
-
-			#define FLUSH() do { \
-				LOGSerial->flush(); \
-			} while (0)
-
-			#define HALT(fmt, ...) do { \
-				snprintf(LOGBuffer, sizeof(LOGBuffer), DEVNETXLOG_FATALERROR fmt, ##__VA_ARGS__); \
-				LOGSerial->print(LOGBuffer); \
-				while (true) { delay(1000); }; \
-			} while (0)
-
-		#endif
-
 		#if (DEVNETXLOG == DEVNETXLOG_MIN)
 
 			// #################################################
@@ -270,16 +199,103 @@
 
 		#endif
 
+		// ##########################################################
+		// ##   devnetXLOG PRINT() FLUSH() HALT() Implementation   ##
+		// ##########################################################
+
+		#if defined(ARDUINO_ARCH_AVR)
+
+			#define PRINT(val) do { \
+				LOGSerial->print(val); \
+			} while (0)
+
+			#define PRINTLN(val) do { \
+				LOGSerial->println(val); \
+			} while (0)
+
+			#define PRINTF(fmt, ...) do { \
+				printf_P(PSTR(fmt), ##__VA_ARGS__); \
+			} while (0)
+
+			#define FLUSH() do { \
+				LOGSerial->flush(); \
+			} while (0)
+
+			#define HALT(fmt, ...) do { \
+				printf_P(PSTR(DEVNETXLOG_FATALERROR fmt), ##__VA_ARGS__); \
+				while (true) { delay(1); }; \
+			} while (0)
+
+		#elif defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
+			
+			#define PRINT(val) do { \
+				LOGSerial->print(val); \
+			} while (0)
+
+			#define PRINTLN(val) do { \
+				LOGSerial->println(val); \
+			} while (0)
+
+			#define PRINTF(fmt, ...) do { \
+				LOGSerial->printf_P(PSTR(fmt), ##__VA_ARGS__); \
+			} while (0)
+
+			#define FLUSH() do { \
+				LOGSerial->flush(); \
+			} while (0)
+
+			#define HALT(fmt, ...) do { \
+				LOGSerial->printf_P(PSTR(DEVNETXLOG_FATALERROR fmt), ##__VA_ARGS__); \
+				while (true) { delay(1); }; \
+			} while (0)
+
+		#elif defined(ARDUINO_ARCH_SAMD)
+
+			#if !defined(DEVNETXLOG_BUFFER_SIZE)
+				#define DEVNETXLOG_BUFFER_SIZE 256UL
+			#endif
+
+			extern char LOGBuffer[DEVNETXLOG_BUFFER_SIZE];
+
+			#define PRINT(val) do { \
+				LOGSerial->print(val); \
+			} while (0)
+
+			#define PRINTLN(val) do { \
+				LOGSerial->println(val); \
+			} while (0)
+
+			#define PRINTF(fmt, ...) do { \
+				snprintf(LOGBuffer, sizeof(LOGBuffer), fmt, ##__VA_ARGS__); \
+				LOGSerial->print(LOGBuffer); \
+			} while (0)
+
+			#define FLUSH() do { \
+				LOGSerial->flush(); \
+			} while (0)
+
+			#define HALT(fmt, ...) do { \
+				snprintf(LOGBuffer, sizeof(LOGBuffer), DEVNETXLOG_FATALERROR fmt, ##__VA_ARGS__); \
+				LOGSerial->print(LOGBuffer); \
+				while (true) { delay(1); }; \
+			} while (0)
+
+		#endif
+
 	#else
 
-		// devnetXLOG is deactivated
+		// ###################################
+		// ##   devnetXLOG IS DEACTIVATED   ##
+		// ###################################
+
 		extern "C" bool LOGBegin(HardwareSerial *serial);
 		
-		#define WRITE(...)		do { (void)0; } while (0)
-		#define PRINT(...)		do { (void)0; } while (0)
-		#define FLUSH()			do { (void)0; } while (0)
-		#define HALT(...)		do { while (true) { delay(1000); }; } while (0)
-		#define LOG(...)		do { (void)0; } while (0)
+		#define LOG(...)		do { (void)0;  } while (0)
+		#define PRINT(...)		do { (void)0;  } while (0)
+		#define PRINTLN(...)	do { (void)0;  } while (0)
+		#define PRINTF(...)		do { (void)0;  } while (0)
+		#define FLUSH()			do { (void)0;  } while (0)
+		#define HALT(...)		do { delay(1); } while (1)
 
 	#endif
 

@@ -17,23 +17,30 @@ The initialization must be done **before** calling any other library functions.
 LOG(const char *fmt, ...);
 ```
 Sends a log entry over Serial, according to the selected feature level and specified parameters and options.
-The message can be formatted using printf-style syntax.
+The message can be formatted using printf-style syntax. The ```fmt``` (template) will be stored in flash (PROGMEM).
 
 For more details on printf formatting, see: https://www.tutorialspoint.com/c_standard_library/c_function_printf.htm
 
 ### PRINT (macro)
 ```c++
-void PRINT(const char *fmt, ...);
-```
-Sends a raw message over Serial without any features defined by the feature level or specified parameters and options.
-The message can be formatted using printf-style syntax.
-
-### WRITE (macro)
-```c++
-void WRITE(val);
+void PRINT(val);
 ```
 Passes val to Serial.print().
 This is basically a macro for Serial.print(val).
+
+### PRINTLN (macro)
+```c++
+void PRINTLN(val);
+```
+Passes val to Serial.println().
+This is basically a macro for Serial.println(val).
+
+### PRINTF (macro)
+```c++
+void PRINTF(const char *fmt, ...);
+```
+Sends a raw message over Serial without any features defined by the feature level or specified parameters and options.
+The message can be formatted using printf-style syntax. The ```fmt``` (template) will be stored in flash (PROGMEM).
 
 ### FLUSH (macro)
 ```c++
@@ -47,9 +54,8 @@ This can be useful if you want to ensure that all data has been transmitted by t
 void HALT(const char *fmt, ...);
 ```
 Sends the predefined HALT message over Serial followed by your message.
-The message can be formatted using printf-style syntax.
-Puts the MCU in a simple endless loop and provides no power saving features.
-
+The message can be formatted using printf-style syntax. The ```fmt``` (template) will be stored in flash (PROGMEM).
+Puts the MCU in a simple endless loop. Provides no power saving features.
 
 ## Feature Levels
 devnetXLOG can be configured to display multiple information before your printf-styled output using the provided ```LOG(...)``` command.
@@ -57,7 +63,7 @@ The displayed information is defined by the feature level and can be specified b
 - ```0```
 	devnetXLOG is deactivated with *no output*. This is the default behavior!
 	Displays: *nothing* - no output will be sent to device monitor at all and no UART/Serial initialization.
-	The compiler will optimize out all of your ```LOG()```, ```PRINT()``` and ```HALT()``` messages and no memory will be used.
+	The compiler will optimize out all of your ```LOGBegin()```, ```LOG()```, ```PRINT()```, ```PRINTLN()```, ```PRINTF()``` and ```HALT()``` calls and no memory will be used.
 - ```1```
 	devnetXLOG is activated with the *minimal output*.
 	Displays: printf-style formatted message only.

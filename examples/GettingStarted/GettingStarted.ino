@@ -15,15 +15,15 @@ void setup()
 void loop()
 {
 	LOG("This is a test %s, followed by an integer: %i", "String", 42);
-	PRINT("This is a %s without line termination. Loading", "message");
+	PRINTF("This is a %s without line termination. Loading ", "message");
 
 	for (uint8_t n = 0; n < 10; n++)
 	{
-		WRITE(".");
+		PRINT(".");
 		delay(500);	
 	}
 
-	PRINT(__BR__);
+	PRINTLN(" done.");
 
 	HALT("Actually, no error occured. Demo done.");
 }

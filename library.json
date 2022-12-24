@@ -1,8 +1,8 @@
 {
 	"name": "devnetXLOG",
-	"version": "1.4.0",
+	"version": "1.5.0",
 	"description": "A simple Arduino logging library that provides easy printf-style outputs to Serial.",
-	"keywords": "devnetX, Log, Arduino, Serial, UART, printf, printf, LOG, PRINT, WRITE, FLUSH, HALT",
+	"keywords": "devnetX, Log, Arduino, Serial, UART, Debug, LOGBegin, LOG, PRINT, PRINTLN, PRINTF, FLUSH, HALT",
 	"repository":
 	{
 		"type": "git",
