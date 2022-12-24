@@ -23,35 +23,35 @@ For more details on printf formatting, see: https://www.tutorialspoint.com/c_sta
 
 ### PRINT (macro)
 ```c++
-void PRINT(val);
+PRINT(val);
 ```
 Passes val to Serial.print().
 This is basically a macro for Serial.print(val).
 
 ### PRINTLN (macro)
 ```c++
-void PRINTLN(val);
+PRINTLN(val);
 ```
 Passes val to Serial.println().
 This is basically a macro for Serial.println(val).
 
 ### PRINTF (macro)
 ```c++
-void PRINTF(const char *fmt, ...);
+PRINTF(const char *fmt, ...);
 ```
 Sends a raw message over Serial without any features defined by the feature level or specified parameters and options.
 The message can be formatted using printf-style syntax. The ```fmt``` (template) will be stored in flash (PROGMEM).
 
 ### FLUSH (macro)
 ```c++
-void FLUSH();
+FLUSH();
 ```
 Waits until the transmit buffer is empty. 
 This can be useful if you want to ensure that all data has been transmitted by the Serial before sending the MCU to sleep.
 
 ### HALT (macro)
 ```c++
-void HALT(const char *fmt, ...);
+HALT(const char *fmt, ...);
 ```
 Sends the predefined HALT message over Serial followed by your message.
 The message can be formatted using printf-style syntax. The ```fmt``` (template) will be stored in flash (PROGMEM).
